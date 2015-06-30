@@ -30,18 +30,24 @@ class FFCommon:
 		return val + "%" if n is 1 else val
 
 	def print_diff(self, n):
-		col_pre_good = '<span style="padding:4px;color:white;background-color:green">'
-		col_pre_bad = '<span style="padding:4px;color:white;background-color:red">'
-		col_suf = "</span>"
+		icon_good = 'caret-up'
+		icon_bad= 'caret-down'
+		cls_good = 'stats-good'
+		cls_bad = 'stats-bad'
+		cls_neutral = 'stats-neutral'
+		stats = '<span class="%s">%s <i class="fa fa-%s"></i></span>'
 		val = self.read_file(self.files_diff[n])
-		pval = val + "%" if n is 1 else val
+		pval = str(abs(int(val))) + "%" if n is 1 else abs(int(val))
 		if int(val) > 0:
-			pval = col_pre_good + pval + col_suf
+			cls = cls_good
+			icon = icon_good
 		elif int(val) < 0:
-			pval = col_pre_bad + pval + col_suf
+			cls = cls_bad
+			icon = icon_bad
 		else:
-			pval = "-"
-		return pval
+			cls = cls_neutral
+		html = stats % (cls, pval, icon)
+		return html
 		# where is the macro imported from? needed for xml output
 		#return macro.formatter.text("NODECOUNT: %d" % (val, diff))
 
