@@ -41,7 +41,7 @@ def macro_FFImageChooser(macro):
     vendors = get_yaml(files[vendors_idx], attach_dir)
 
     # output
-    ret = '<form action="/download/">'
+    ret = '<form action="/download/" class="download-form">'
     for vendor in vendors:
         ret += """
 <input type="radio" name="vendor" value="%(id)s" class="vendor" id="vendor-%(id)s" />
