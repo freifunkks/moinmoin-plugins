@@ -84,5 +84,6 @@ def macro_FFImageChooser(macro):
     for channel in channels:
         ret += '<button type="submit" class="download-button">%(name)s herunterladen</button>' % channel
 
-    return ret
+    ret += '<script type="text/javascript" src="/wikistatic/ffks/js/firmware-dl.js"></script>'
 
+    return ret
