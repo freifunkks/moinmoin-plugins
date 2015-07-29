@@ -16,7 +16,6 @@ def get_yaml(file, attach_dir):
     return yaml.load(codecs.open(os.path.join(attach_dir, file), 'rb', config.charset))
 
 def macro_FFImageChooser(macro):
-    channels_file = 'channels.yml'
     vendors_file = 'vendors.yml'
 
     request = macro.request
@@ -25,13 +24,6 @@ def macro_FFImageChooser(macro):
     pagename = formatter.page.page_name
     files = AttachFile._get_files(request, pagename)
     attach_dir = AttachFile.getAttachDir(request, pagename)
-
-    # channels
-    try:
-        channels_idx = files.index(channels_file)
-    except ValueError:
-        return "Konnte Dateianhang " + channels_file +" nicht finden"
-    channels = get_yaml(files[channels_idx], attach_dir)
 
     # vendors
     try:
@@ -42,47 +34,43 @@ def macro_FFImageChooser(macro):
 
     # output
     ret = '<form action="/download/" class="download-form">'
-    for vendor in vendors:
-        ret += """
-<input type="radio" name="vendor" value="%(id)s" class="vendor" id="vendor-%(id)s" />
-    <label for="vendor-%(id)s">%(name)s</label>
-    <div class="device-list">
-               """ % vendor
-        for device in vendor['devices']:
-            ret += '''
-        <div class="device-wrap">
-          <input type="radio" name="device" value="%(device_id)s" class="device" id="device-%(vendor_id)s-%(device_id)s" />
-          <label for="device-%(vendor_id)s-%(device_id)s">
-            %(device_name)s
-          </label>
-          <div class="versions">
-                   ''' % {'device_id': device['id'], 'device_name': device['name'], 'vendor_id': vendor['id']}
-            try:
-                versions = device['versions']
-            except:
-                versions = ''
-                pass
-            for version in versions:
-                try:
-                    version_label = version['name']
-                except:
-                    version_label = version['id']
-                    pass
-                ret += '''
-                <input type="radio" name="version" value="%(version_id)s" class="version" id="version-%(vendor_id)s-%(device_id)s-%(version_id)s" />
-                <label for="version-%(vendor_id)s-%(device_id)s-%(version_id)s">%(version_label)s</label>
-                       ''' % {'device_id': device['id'], 'vendor_id': vendor['id'], 'version_id': version['id'], 'version_label' : version_label}
-            ret += '''
-          </div>
-        </div>
-                   '''
 
+    for vendor in vendors:
         ret += '''
-    </div>
-</input>
-               '''
-    for channel in channels:
-        ret += '<button type="submit" class="download-button">%(name)s herunterladen</button>' % channel
+            <input type="radio" name="vendor" class="vendor" id="vendor-%(id)s" />
+            <label for="vendor-%(id)s">%(name)s</label>
+            <div class="device-list">''' % vendor
+
+        for device in vendor['devices']:
+            ret += '<div class="device-wrap">'
+
+            if 'versions' in device:
+                ret += '''
+                    <input type="radio" name="device" class="device" id="device-%(vendor_id)s-%(device_id)s" />
+                    <label for="device-%(vendor_id)s-%(device_id)s">%(device_name)s</label>
+                    <div class="version-list">
+                    ''' % {'device_id': device['id'], 'device_name': device['name'], 'vendor_id': vendor['id']}
+                for version in device['versions']:
+                    try:
+                        version_label = version['name']
+                    except:
+                        version_label = version['id']
+
+                    ret += '''
+                        <a class="version" href="http://dl.ffks.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s-%(version)s.bin">
+                            %(text)s
+                        </a>''' % {'vendor': vendor['id'], 'device': device['id'], 'version': version['id'], 'text': version_label}
+
+                ret += '</div>'
+            else:
+                ret += '''
+                    <a class="device" href="http://dl.ffks.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s.bin">
+                        %(text)s
+                    </a>''' % {'vendor': vendor['id'], 'device': device['id'], 'text': device['name']}
+
+            ret += '</div>'
+
+        ret += '</div>'
 
     ret += '<script type="text/javascript" src="/wikistatic/ffks/js/firmware-dl.js"></script>'
 
