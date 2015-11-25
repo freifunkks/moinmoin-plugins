@@ -6,7 +6,7 @@ class FFCommon:
     def __init__(self):
         #dir = os.getenv('HOME') + '/tmp/ffks_network_stats/'
         self.dir = '/home/ffks/tmp/ffks_network_stats/'
-        self.values = ('clients', 'link_percentage', 'links', 'nodes')
+        self.values = ('clients', 'link_percentage', 'links', 'nodes', 'traffic.json')
         self.suffix = '_diff'
         self.files = []
         self.files_diff = []
@@ -24,6 +24,9 @@ class FFCommon:
         ret = f.read()
         f.close()
         return ret
+
+    def get_file(self, n):
+		return self.read_file(self.files[n])
 
     def print_val(self, n):
         val = self.read_file(self.files[n])
@@ -48,7 +51,6 @@ class FFCommon:
         else:
             cls = cls_neutral
             icon = icon_neutral
-        html = "asdf"
         html = stats % (cls, pval, icon)
         return html
         # where is the macro imported from? needed for xml output
