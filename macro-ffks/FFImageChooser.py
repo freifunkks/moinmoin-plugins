@@ -33,7 +33,7 @@ def macro_FFImageChooser(macro):
     vendors = get_yaml(files[vendors_idx], attach_dir)
 
     # output
-    ret = '<form action="/download/" class="download-form">'
+    ret = '<div class="download-form">'
 
     for vendor in vendors:
         ret += '''
@@ -57,14 +57,14 @@ def macro_FFImageChooser(macro):
                         version_label = version['id']
 
                     ret += '''
-                        <a class="version" href="http://dl.ffks.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s-%(version)s.bin">
+                        <a class="version" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s-%(version)s.bin">
                             %(text)s
                         </a>''' % {'vendor': vendor['id'], 'device': device['id'], 'version': version['id'], 'text': version_label}
 
                 ret += '</div>'
             else:
                 ret += '''
-                    <a class="device" href="http://dl.ffks.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s.bin">
+                    <a class="device" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s.bin">
                         %(text)s
                     </a>''' % {'vendor': vendor['id'], 'device': device['id'], 'text': device['name']}
 
