@@ -60,14 +60,14 @@ def macro_FFImageChooser(macro):
                         version_label = version['id']
 
                     ret += '''
-                        <a class="version" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-$(release)s-%(vendor)s-%(device)s-%(version)s.bin">
+                        <a class="version" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-%(release)s-%(vendor)s-%(device)s-%(version)s.bin">
                             %(text)s
                         </a>''' % {'release': release, 'vendor': vendor['id'], 'device': device['id'], 'version': version['id'], 'text': version_label}
 
                 ret += '</div>'
             else:
                 ret += '''
-                    <a class="device" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-$(release)-%(vendor)s-%(device)s.bin">
+                    <a class="device" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-%(release)s-%(vendor)s-%(device)s.bin">
                         %(text)s
                     </a>''' % {'release': release, 'vendor': vendor['id'], 'device': device['id'], 'text': device['name']}
 
