@@ -18,6 +18,9 @@ def get_yaml(file, attach_dir):
 def macro_FFImageChooser(macro):
     vendors_file = 'vendors.yml'
 
+    # TODO: Add this to the yml file?
+    release = 'v2016.1-1'
+
     request = macro.request
     formatter = macro.formatter
 
@@ -57,16 +60,16 @@ def macro_FFImageChooser(macro):
                         version_label = version['id']
 
                     ret += '''
-                        <a class="version" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s-%(version)s.bin">
+                        <a class="version" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-$(release)s-%(vendor)s-%(device)s-%(version)s.bin">
                             %(text)s
-                        </a>''' % {'vendor': vendor['id'], 'device': device['id'], 'version': version['id'], 'text': version_label}
+                        </a>''' % {'release': release, 'vendor': vendor['id'], 'device': device['id'], 'version': version['id'], 'text': version_label}
 
                 ret += '</div>'
             else:
                 ret += '''
-                    <a class="device" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-2015.02.07.11-%(vendor)s-%(device)s.bin">
+                    <a class="device" href="https://dl.freifunk-kassel.de/images/stable/factory/gluon-ffks-$(release)-%(vendor)s-%(device)s.bin">
                         %(text)s
-                    </a>''' % {'vendor': vendor['id'], 'device': device['id'], 'text': device['name']}
+                    </a>''' % {'release': release, 'vendor': vendor['id'], 'device': device['id'], 'text': device['name']}
 
             ret += '</div>'
 
