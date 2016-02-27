@@ -38,37 +38,32 @@ def macro_FFImageChooser(macro):
 
     # output
     ret = '<div class="download-form">'
-
     for vendor in data['vendors']:
         ret += '''
             <input type="radio" name="vendor" class="vendor" id="vendor-%(id)s" />
             <label for="vendor-%(id)s">%(name)s</label>
             <div class="device-list">''' % vendor
-
         for device in vendor['devices']:
             extension = device['extension'] if 'extension' in device else 'bin'
-
             ret += '<div class="device-wrap">'
-
             if 'versions' in device:
                 ret += '''
                     <input type="radio" name="device" class="device" id="device-%(vendor_id)s-%(device_id)s" />
                     <label for="device-%(vendor_id)s-%(device_id)s">%(device_name)s</label>
                     <div class="version-list">
-                    ''' % {'device_id': device['id'], 'device_name': device['name'], 'vendor_id': vendor['id']}
-                for version in device['versions']:
-                    try:
-                        version_label = version['name']
-                    except:
-                        version_label = version['id']
+                    ''' % {
+                    'device_id': device['id'], 'device_name': device.get('name', device['id']),
+                    'vendor_id': vendor['id']
+                }
 
+                for version in device['versions']:
                     ret += '''
                         <a class="version" href="https://dl.freifunk-kassel.de/images/%(chan)s/factory/gluon-ffks-%(rel)s-%(vendor)s-%(device)s-%(version)s.%(ext)s">
                             %(text)s
                         </a>''' % {
                         'chan': data['channel'], 'rel': data['release'], 'vendor': vendor['id'],
-                        'device': device['id'], 'version': version['id'], 'text': version_label,
-                        'ext': extension
+                        'device': device['id'], 'version': version['id'],
+                        'text': version.get('name', version['id']), 'ext': extension
                     }
 
                 ret += '</div>'
@@ -78,13 +73,11 @@ def macro_FFImageChooser(macro):
                         %(text)s
                     </a>''' % {
                     'chan': data['channel'], 'rel': data['release'], 'vendor': vendor['id'],
-                    'device': device['id'], 'text': device['name'], 'ext': extension
+                    'device': device['id'], 'text': device.get('name', device['id']),
+                    'ext': extension
                 }
-
             ret += '</div>'
-
         ret += '</div>'
-
     ret += '<script type="text/javascript" src="/wikistatic/ffks/js/firmware-dl.js"></script>'
 
     return ret
